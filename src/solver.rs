@@ -39,11 +39,11 @@ fn kick_particle(part: &mut Particle, e_field: &ElectricField, b_field: &Magneti
     part.vel.2 = part.vel.2 + dt * part.q/part.m * ( e_field.2 + part.vel.0 * b_field.1 - part.vel.1 * b_field.0 );
 }
 
-pub fn solve() -> [Position; 1000] {
+pub fn solve() -> [Position; 100] {
     let e_field = &ElectricField(0., 0., 0.);
     let b_field = &MagneticField(0., 0., 1.);
     let mut part = build_particle( Position(1., 0., 0.), Velocity(0., 1., 0.), 1., -1. );
-    let mut res = [part.pos.clone(); 1000];
+    let mut res = [part.pos.clone(); 100];
 
     kick_particle(&mut part, e_field, b_field, -0.5 * TIME_STEP);
 
@@ -52,7 +52,7 @@ pub fn solve() -> [Position; 1000] {
         push_particle(&mut part);
 
         if i % 10 == 0 {
-            res[i] = part.pos.clone();
+            res[i/10] = part.pos.clone();
         }
     }
 

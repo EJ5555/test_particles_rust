@@ -1,7 +1,7 @@
 use plotters::prelude::*;
 
 const OUT_FILE_NAME: &'static str = "graphs/animation.gif";
-pub fn create_plot(data: [crate::solver::Position; 1000]) -> Result<(), Box<dyn std::error::Error>> {
+pub fn create_plot(data: [crate::solver::Position; 100]) -> Result<(), Box<dyn std::error::Error>> {
     let root = BitMapBackend::gif(OUT_FILE_NAME, (800, 800), 100)?.into_drawing_area();
 
     root.fill(&WHITE)?;
