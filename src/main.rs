@@ -2,6 +2,6 @@ mod solver;
 mod plot;
 
 fn main () {
-    let res = solver::solve();
-    plot::create_plot(res).unwrap();
+    solver::run_simulation("data/pos_array.dat");
+    plot::create_plot("data/pos_array.dat").unwrap();
 }

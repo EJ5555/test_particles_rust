@@ -1,7 +1,15 @@
+extern crate serde;
+extern crate bincode;
+
+use serde::{Serialize, Deserialize};
+use std::fs::File;
+use std::path::Path;
+use std::io::{Write, Result};
+
 const TIME_STEP: f64 = 1e-2;
 
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Position(pub f64, pub f64, pub f64);
 #[derive(Debug, Copy, Clone)]
 struct Velocity(f64, f64, f64);
@@ -11,7 +19,7 @@ struct ElectricField(f64, f64, f64);
 struct MagneticField(f64, f64, f64);
 
 #[derive(Debug, Copy, Clone)]
-pub struct Particle {
+struct Particle {
     pos: Position,
     vel: Velocity,
     m: f64,
@@ -39,7 +47,14 @@ fn kick_particle(part: &mut Particle, e_field: &ElectricField, b_field: &Magneti
     part.vel.2 = part.vel.2 + dt * part.q/part.m * ( e_field.2 + part.vel.0 * b_field.1 - part.vel.1 * b_field.0 );
 }
 
-pub fn solve() -> [Position; 100] {
+fn save_data<P: AsRef<Path>>(path: P, pos_array: &[Position; 100]) -> Result<()> {
+    let mut f = File::create(path)?;
+    let buf = bincode::serialize(&pos_array)?;
+    f.write_all(&buf[..])?;
+    Ok(())
+}
+
+fn solve() -> [Position; 100] {
     let e_field = &ElectricField(0., 0., 0.);
     let b_field = &MagneticField(0., 0., 1.);
     let mut part = build_particle( Position(1., 0., 0.), Velocity(0., 1., 0.), 1., -1. );
@@ -59,3 +74,7 @@ pub fn solve() -> [Position; 100] {
     res
 }
 
+pub fn run_simulation<P: AsRef<Path>>(path: P){
+    let pos_array = &solve();
+    let _ = save_data(path, pos_array);
+}

@@ -1,7 +1,29 @@
+extern crate bincode;
+
+use std::fs::File;
+use std::path::Path;
+use std::io::{Read, Result};
+
 use plotters::prelude::*;
 
 const OUT_FILE_NAME: &'static str = "graphs/animation.gif";
-pub fn create_plot(data: [crate::solver::Position; 100]) -> Result<(), Box<dyn std::error::Error>> {
+
+fn load_position_array<P: AsRef<Path>>(path: P) -> [crate::solver::Position; 100] {
+    if let Ok(mut file) = File::open(path) {
+        let mut buf = vec![];
+        if file.read_to_end(&mut buf).is_ok() {
+            if let Ok(pos_array) = bincode::deserialize(&buf[..]) {
+                return pos_array;
+            }
+        }
+    }
+}
+
+
+pub fn create_plot<P: AsRef<Path>>(data_path: P,) -> Result<()> {
+
+    let data = load_position_array(data_path);
+
     let root = BitMapBackend::gif(OUT_FILE_NAME, (800, 800), 100)?.into_drawing_area();
 
     root.fill(&WHITE)?;
