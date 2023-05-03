@@ -72,7 +72,7 @@ pub fn run_simulation<P: AsRef<Path>>(path: P){
     let file = fs::OpenOptions::new()
         .write(true)
         .create(true)
-        .append(true)
+        .append(false)
         .open(path)
         .unwrap();
 
