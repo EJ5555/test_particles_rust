@@ -6,7 +6,7 @@ use csv::Writer;
 const TIME_STEP: f64 = 1e-2;
 
 
-#[derive(Debug, Copy, Clone, serde::Serialize)]
+#[derive(Debug, serde::Serialize)]
 struct Position(f64, f64, f64);
 #[derive(Debug)]
 struct Velocity(f64, f64, f64);
