@@ -36,9 +36,7 @@ pub fn create_plot<P: AsRef<Path>>(data_path: P) -> Result<(), Box<dyn std::erro
     for (i, cur_data) in data.iter().enumerate() {
         let mut cur_data_vec: Vec<[f64; 3]> = Vec::new();
         cur_data_vec.push(*cur_data);
-    //for i in 0..data.len()-1{
-        //let mut cur_data = data[i,:]; 
-        //println!("{:?}", cur_data)
+        
         root.fill(&WHITE)?;
 
         let mut chart = ChartBuilder::on(&root)
