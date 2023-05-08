@@ -47,7 +47,6 @@ fn kick_particle(part: &mut Particle, e_field: &ElectricField, b_field: &Magneti
 fn save_data(file: &fs::File, pos_current: &Position) -> Result<(), Box<dyn Error>> {
     let mut wtr = Writer::from_writer(file);
     wtr.serialize(pos_current)?;
-
     Ok(())
 }
 
